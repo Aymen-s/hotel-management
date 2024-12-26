@@ -2,11 +2,15 @@ import { defineField } from "sanity";
 
 const account = {
   name: "account",
-  title: "account",
+  title: "Account",
   type: "document",
   fields: [
     defineField({
       name: "providerType",
+      type: "string",
+    }),
+    defineField({
+      name: "providerId",
       type: "string",
     }),
     defineField({
