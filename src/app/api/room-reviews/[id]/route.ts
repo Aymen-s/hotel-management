@@ -1,9 +1,12 @@
 import { getRoomReviews } from "@/libs/apis";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export async function GET(req: Request, context: { params: { id: string } }) {
-  const params = await context.params;
-  const { id } = params;
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const { id } = context.params;
 
   try {
     const roomReviews = await getRoomReviews(id);
