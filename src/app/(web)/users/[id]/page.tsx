@@ -9,19 +9,19 @@ import { signOut } from "next-auth/react";
 import { getUserBookings } from "@/libs/apis";
 import LoadingSpinner from "../../loading";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { GiMoneyStack } from "react-icons/gi";
 import Table from "@/components/Table/Table";
 import Chart from "@/components/Chart/Chart";
-// import RatingModal from "@/components/RatingModal/RatingModal";
-// import BackDrop from "@/components/BackDrop/BackDrop";
+import RatingModal from "@/components/RatingModal/RatingModal";
+import BackDrop from "@/components/BackDrop/BackDrop";
 import toast from "react-hot-toast";
 import { User } from "@/models/user";
 
-const UserDetails = (props: { params: { id: string } }) => {
-  const {
-    params: { id: userId },
-  } = props;
+const UserDetails = () => {
+  const params = useParams();
+  const userId = Array.isArray(params.id) ? params.id[0] : params.id || "";
 
   const [currentNav, setCurrentNav] = useState<
     "bookings" | "amount" | "ratings"
@@ -63,7 +63,10 @@ const UserDetails = (props: { params: { id: string } }) => {
     }
   };
 
-  const fetchUserBooking = async () => getUserBookings(userId);
+  const fetchUserBooking = async () => {
+    if (!userId) throw new Error("User ID is not provided");
+    return getUserBookings(userId);
+  };
   const fetchUserData = async () => {
     const { data } = await axios.get<User>("/api/users");
     return data;
@@ -201,7 +204,7 @@ const UserDetails = (props: { params: { id: string } }) => {
         </div>
       </div>
 
-      {/* <RatingModal
+      <RatingModal
         isOpen={isRatingVisible}
         ratingValue={ratingValue}
         setRatingValue={setRatingValue}
@@ -211,7 +214,7 @@ const UserDetails = (props: { params: { id: string } }) => {
         reviewSubmitHandler={reviewSubmitHandler}
         toggleRatingModal={toggleRatingModal}
       />
-      <BackDrop isOpen={isRatingVisible} /> */}
+      <BackDrop isOpen={isRatingVisible} />
     </div>
   );
 };
