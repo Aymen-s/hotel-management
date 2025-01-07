@@ -2,7 +2,7 @@
 // import axios from "axios";
 
 // import { CreateBookingDto, Room } from "@/models/room";
-import { Room } from "@/app/models/room";
+import { Room } from "@/models/room";
 import sanityClient from "./sanity";
 import * as queries from "./sanityQueries";
 // import { Booking } from "@/models/booking";
@@ -18,24 +18,24 @@ export async function getFeaturedRoom() {
   return result;
 }
 
-// export async function getRooms() {
-//   const result = await sanityClient.fetch<Room[]>(
-//     queries.getRoomsQuery,
-//     {},
-//     { cache: "no-cache" }
-//   );
-//   return result;
-// }
+export async function getRooms() {
+  const result = await sanityClient.fetch<Room[]>(
+    queries.getRoomsQuery,
+    {},
+    { cache: "no-cache" }
+  );
+  return result;
+}
 
-// export async function getRoom(slug: string) {
-//   const result = await sanityClient.fetch<Room>(
-//     queries.getRoom,
-//     { slug },
-//     { cache: "no-cache" }
-//   );
+export async function getRoom(slug: string) {
+  const result = await sanityClient.fetch<Room>(
+    queries.getRoom,
+    { slug },
+    { cache: "no-cache" }
+  );
 
-//   return result;
-// }
+  return result;
+}
 
 // export const createBooking = async ({
 //   adults,
