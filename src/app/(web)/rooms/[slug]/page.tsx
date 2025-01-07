@@ -6,28 +6,31 @@ import { LiaFireExtinguisherSolid } from "react-icons/lia";
 import { AiOutlineMedicineBox } from "react-icons/ai";
 import { GiSmokeBomb } from "react-icons/gi";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import axios from "axios";
 
 import { getRoom } from "@/libs/apis";
 import LoadingSpinner from "../../loading";
 
-import BookRoomCta from "@/components/BookRoomCta/BookRoomCta";
 import toast from "react-hot-toast";
 import { getStripe } from "@/libs/stripe";
-import RoomReview from "@/components/RoomReview/RoomReview";
+// import RoomReview from "@/components/RoomReview/RoomReview";
 import HotelPhotoGallery from "@/components/HotelPhotoGallery/HotelPhotoGallery";
+import BookRoomCta from "@/components/BookRoomCta/BookRoomCta";
 
-const RoomDetails = (props: { params: { slug: string } }) => {
-  const {
-    params: { slug },
-  } = props;
+const RoomDetails = () => {
+  const params = useParams();
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
   const [checkinDate, setCheckinDate] = useState<Date | null>(null);
   const [checkoutDate, setCheckoutDate] = useState<Date | null>(null);
   const [adults, setAdults] = useState(1);
   const [noOfChildren, setNoOfChildren] = useState(0);
 
-  const fetchRoom = async () => getRoom(slug);
+  const fetchRoom = async () => {
+    if (!slug) throw new Error("Slug is undefined");
+    return getRoom(slug);
+  };
 
   const { data: room, error, isLoading } = useSWR("/api/room", fetchRoom);
 
@@ -37,13 +40,13 @@ const RoomDetails = (props: { params: { slug: string } }) => {
 
   if (!room) return <LoadingSpinner />;
 
-  const calcMinCheckoutDate = () => {
+  const calcMinCheckoutDate = (): Date | undefined => {
     if (checkinDate) {
       const nextDay = new Date(checkinDate);
       nextDay.setDate(nextDay.getDate() + 1);
       return nextDay;
     }
-    return null;
+    return undefined;
   };
 
   const handleBookNowClick = async () => {
@@ -165,9 +168,9 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                 <div className="items-center mb-4">
                   <p className="md:text-lg font-semibold">Customer Reviews</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <RoomReview roomId={room._id} />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
