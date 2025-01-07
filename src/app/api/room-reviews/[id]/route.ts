@@ -1,19 +1,18 @@
 import { getRoomReviews } from "@/libs/apis";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
 export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
+  req: Request,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
+  const roomId = params.id;
 
   try {
-    const roomReviews = await getRoomReviews(id);
+    const roomReviews = await getRoomReviews(roomId);
 
     return NextResponse.json(roomReviews, {
       status: 200,
-      statusText: "Successful",
+      statusText: "Succesful",
     });
   } catch (error) {
     console.log("Getting Review Failed", error);
